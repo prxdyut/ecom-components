@@ -111,7 +111,7 @@ export default function HomeContainer(props) {
                 className="mySwiper"
               >
                 {data.assets.map((asset, index) => (
-                  <SwiperSlide>
+                  <SwiperSlide key={index}>
                     <Link href={`${pageURL}/gallery?currentIndex=${index}`}>
                       <AspectRatio
                         ratio="1/1"

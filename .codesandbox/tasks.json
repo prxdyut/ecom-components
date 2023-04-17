@@ -11,6 +11,10 @@
     "npm run dev": {
       "name": "npm run dev",
       "command": "npm run dev"
+    },
+    "npm run build": {
+      "name": "npm run build",
+      "command": "npm run build"
     }
   }
 }

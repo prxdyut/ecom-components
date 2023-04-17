@@ -37,7 +37,7 @@ function Products(props) {
   return (
     !!data &&
     data.map((product, index) => (
-      <React.Fragment>
+      <React.Fragment key={index}>
         {index > 0 && <Box sx={{ my: 1 }} />}
         <Link href={`/product/${product.id}`}>
           <Card elevation={0}>
@@ -92,8 +92,8 @@ export default function HomeContainer(props) {
       <Container sx={{ py: 2 }}>
         <Stack gap={2}>
           {!!data &&
-            data.children.map((subCategory) => (
-              <Accordion>
+            data.children.map((subCategory, index) => (
+              <Accordion key={index}>
                 <AccordionSummary
                   aria-controls="panel1a-content"
                   id="panel1a-header"

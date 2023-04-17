@@ -18,6 +18,7 @@ export default function App() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
+    const id = id;
     API.getProduct(id).then((response) => setData(response));
   }, []);
   console.log(data);
@@ -46,7 +47,7 @@ export default function App() {
 }`}</style>
           {!!data &&
             data.assets.map((asset, index) => (
-              <SwiperSlide>
+              <SwiperSlide key={index}>
                 <div className="swiper-zoom-container">
                   <img src={asset.url} />
                 </div>

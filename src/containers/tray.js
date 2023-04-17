@@ -53,7 +53,7 @@ export default function TrayContainer() {
         <Stack gap={2}>
           {!!data &&
             data.line_items.map((item, index) => (
-              <React.Fragment>
+              <React.Fragment key={index}>
                 <Card elevation={0}>
                   <CardActionArea
                     sx={{
