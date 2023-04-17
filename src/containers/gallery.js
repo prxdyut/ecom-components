@@ -7,75 +7,53 @@ import "swiper/css";
 import "swiper/css/zoom";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { RxCross2 } from "react-icons/rx";
+import * as API from "../api";
 
 export default function App() {
   const router = useRouter();
   const index = router.query.currentIndex;
   const defaultSlide = Number(index, 10);
+  const { id } = router.query;
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    API.getProduct(id).then((response) => setData(response));
+  }, []);
+  console.log(data);
+
   return (
     index && (
-      <Swiper
-        style={{
-          "--swiper-navigation-color": "#fff",
-          "--swiper-pagination-color": "#fff",
-          height: "100vh",
-          background: "black",
-        }}
-        zoom={true}
-        navigation={true}
-        pagination={{
-          clickable: true,
-        }}
-        initialSlide={defaultSlide}
-        modules={[Zoom, Navigation, Pagination]}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="swiper-zoom-container">
-            <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-          </div>
-        </SwiperSlide>
-      </Swiper>
+      <React.Fragment>
+        <Swiper
+          style={{
+            "--swiper-navigation-color": "#fff",
+            "--swiper-pagination-color": "#fff",
+            height: "100vh",
+            background: "black",
+          }}
+          zoom={true}
+          navigation={true}
+          pagination={{
+            clickable: true,
+          }}
+          initialSlide={defaultSlide}
+          modules={[Zoom, Navigation, Pagination]}
+          className="mySwiper"
+        >
+          <style>{`.swiper-zoom-container>canvas, .swiper-zoom-container>img, .swiper-zoom-container>svg {
+    width: 100%;
+}`}</style>
+          {!!data &&
+            data.assets.map((asset, index) => (
+              <SwiperSlide>
+                <div className="swiper-zoom-container">
+                  <img src={asset.url} />
+                </div>
+              </SwiperSlide>
+            ))}
+        </Swiper>
+      </React.Fragment>
     )
   );
 }

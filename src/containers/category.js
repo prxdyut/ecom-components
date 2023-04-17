@@ -25,27 +25,21 @@ import { GiChickenOven } from "react-icons/gi";
 import { MdExpandMore } from "react-icons/md";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import * as API from "../api";
 
 function Products(props) {
   const [data, setData] = React.useState(null);
-  const [isLoading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    setLoading(true);
-    fetch(`${window.location.origin}/api/products/${props.slug}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
-  }, []);
+    API.getProducts(props.slug).then((response) => setData(response));
+  }, [props.slug]);
 
   return (
     !!data &&
     data.map((product, index) => (
       <React.Fragment>
         {index > 0 && <Box sx={{ my: 1 }} />}
-        <Link href={`../../product/`}>
+        <Link href={`/product/${product.id}`}>
           <Card elevation={0}>
             <CardActionArea
               sx={{
@@ -82,26 +76,19 @@ function Products(props) {
 
 export default function HomeContainer(props) {
   const router = useRouter();
-  const { id } = router.query;
-  const [data, setData] = React.useState(false);
+  const [data, setData] = React.useState(null);
   const [isLoading, setLoading] = React.useState(false);
+  const { slug } = router.query;
 
   React.useEffect(() => {
-    setLoading(true);
-    fetch(`${window.location.origin}/api/categories/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
-  }, []);
+    API.getCategory(slug).then((response) => setData(response));
+  }, [slug]);
 
   return (
     <>
       <AppBar position="sticky">
         <Toolbar />
       </AppBar>
-
       <Container sx={{ py: 2 }}>
         <Stack gap={2}>
           {!!data &&

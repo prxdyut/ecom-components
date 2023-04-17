@@ -25,18 +25,23 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import { GiChickenOven } from "react-icons/gi";
 import { MdExpandMore } from "react-icons/md";
 import { BsPlus, BsDash } from "react-icons/bs";
+import * as API from "../api";
 
 export default function TrayContainer() {
-  const [open, setOpen] = React.useState(false);
-  const [modalContent, setModalContent] = React.useState({
-    head: null,
-    price: null,
-    firstRender: true,
-  });
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [data, setData] = React.useState(null);
 
-  React.useEffect(() => handleOpen(), [modalContent]);
+  API.getCart().then((response) => setData(response));
+
+  console.log(data);
+
+  const increaseQuantity = (id, quantity) =>
+    API.updateCartProductQuantity(id, quantity + 1).then((response) =>
+      console.log(response)
+    );
+  const decreaseQuantity = (id, quantity) =>
+    API.updateCartProductQuantity(id, quantity - 1).then((response) =>
+      console.log(response)
+    );
 
   return (
     <>
@@ -46,62 +51,71 @@ export default function TrayContainer() {
 
       <Container sx={{ py: 2 }}>
         <Stack gap={2}>
-          {["", "", ""].map((item, index) => (
-            <React.Fragment>
-              <Card elevation={0}>
-                <CardActionArea
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <AspectRatio
-                    ratio="1/1"
-                    sx={{ minWidth: "33.3%" }}
-                  ></AspectRatio>
-                  <Box
+          {!!data &&
+            data.line_items.map((item, index) => (
+              <React.Fragment>
+                <Card elevation={0}>
+                  <CardActionArea
                     sx={{
-                      py: 1,
-                      px: 2,
-                      flexGrow: 1,
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
+                      alignItems: "flex-start",
                     }}
                   >
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Typography variant="body1" fontWeight="500">
-                        Chicken Dum Biryani
-                      </Typography>
-                      <Typography variant="body2">
-                        Chicken Dum Biryani
-                      </Typography>
-                      <GiChickenOven style={{ color: "red" }} />
+                    <AspectRatio
+                      ratio="1/1"
+                      sx={{ minWidth: "33.3%" }}
+                    ></AspectRatio>
+                    <Box
+                      sx={{
+                        py: 1,
+                        px: 2,
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="body1" fontWeight="500">
+                          {item.name}
+                        </Typography>
+                        <Typography variant="body2">
+                          Chicken Dum Biryani
+                        </Typography>
+                        <GiChickenOven style={{ color: "red" }} />
+                      </Box>
                     </Box>
-                  </Box>
-                </CardActionArea>
-                <CardActions>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      alignSelf: "end",
-                    }}
-                  >
-                    <IconButton sx={{ border: 1 }} size="small">
-                      <BsPlus />
-                    </IconButton>
-                    <Typography variant="body1" sx={{ px: 2 }}>
-                      3
-                    </Typography>
-                    <IconButton sx={{ border: 1 }} size="small">
-                      <BsDash />
-                    </IconButton>
-                  </Box>
-                </CardActions>
-              </Card>
-            </React.Fragment>
-          ))}
+                  </CardActionArea>
+                  <CardActions>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        alignSelf: "end",
+                      }}
+                    >
+                      <IconButton
+                        sx={{ border: 1 }}
+                        size="small"
+                        onClick={() => increaseQuantity(item.id, item.quantity)}
+                      >
+                        <BsPlus />
+                      </IconButton>
+                      <Typography variant="body1" sx={{ px: 2 }}>
+                        {item.quantity}
+                      </Typography>
+                      <IconButton
+                        sx={{ border: 1 }}
+                        size="small"
+                        onClick={() => decreaseQuantity(item.id, item.quantity)}
+                      >
+                        <BsDash />
+                      </IconButton>
+                    </Box>
+                  </CardActions>
+                </Card>
+              </React.Fragment>
+            ))}
           <Box></Box>
         </Stack>
         <Box sx={{ pt: 2 }}>
