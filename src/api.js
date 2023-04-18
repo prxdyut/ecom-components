@@ -32,3 +32,8 @@ export async function updateCartProductQuantity(id, quantity) {
   const cart = await commerce.cart.update(id, { quantity: quantity });
   return cart;
 }
+
+export async function addToCart(id, quantity) {
+  const cart = await commerce.cart.add(id, quantity);
+  return cart;
+}
