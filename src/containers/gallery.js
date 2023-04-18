@@ -18,7 +18,6 @@ export default function App() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
-    const id = id;
     API.getProduct(id).then((response) => setData(response));
   }, []);
   console.log(data);
