@@ -180,7 +180,10 @@ export default function HomeContainer(props) {
           <ButtonGroup fullWidth>
             <Button
               variant="outlined"
-              onClick={() => API.addToCart(data.id, quantity)}
+              onClick={() => {
+                API.addToCart(data.id, quantity);
+                resetQuantity();
+              }}
             >
               Add to Tray
             </Button>

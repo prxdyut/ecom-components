@@ -113,6 +113,8 @@ export default function TrayContainer() {
 
   API.getCart().then((response) => setData(response));
 
+  console.log(data);
+
   return (
     <>
       <AppBar position="sticky">
@@ -128,42 +130,44 @@ export default function TrayContainer() {
           <Box></Box>
         </Stack>
         <Box sx={{ pt: 2 }}>
-          <Grid container>
-            <Grid item xs={6}>
-              <Typography variant="body1">Total:</Typography>
+          {!!data && (
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography variant="body1">Total:</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  variant="body1"
+                  fontWeight="500"
+                  sx={{ textAlign: "end" }}
+                >
+                  {data.subtotal.formatted_with_symbol}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" fontWeight="400">
+                  Discount:
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  variant="body1"
+                  fontWeight="500"
+                  sx={{ textAlign: "end" }}
+                >
+                  0
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ pt: 2 }} />
+              </Grid>
+              <Grid item xs={12}>
+                <Button fullWidth variant="contained">
+                  Proceed
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant="body1"
-                fontWeight="500"
-                sx={{ textAlign: "end" }}
-              >
-                $200
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body1" fontWeight="400">
-                Discount:
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant="body1"
-                fontWeight="500"
-                sx={{ textAlign: "end" }}
-              >
-                -$10
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ pt: 2 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained">
-                Proceed
-              </Button>
-            </Grid>
-          </Grid>
+          )}
         </Box>
       </Container>
     </>
