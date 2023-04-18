@@ -113,8 +113,6 @@ export default function TrayContainer() {
 
   API.getCart().then((response) => setData(response));
 
-  console.log(data);
-
   return (
     <>
       <AppBar position="sticky">
