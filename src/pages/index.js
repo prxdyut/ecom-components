@@ -1,6 +1,24 @@
 import Head from "next/head";
-import Container from "../containers/home";
+import Container from "../containers/index";
 import commerce from "../lib/commerce";
+import { useSession, signIn, signOut } from "next-auth/react";
+export function Component() {
+  const { data: session } = useSession();
+  if (session) {
+    return (
+      <>
+        Signed in as {session.user.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
+  return (
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
+  );
+}
 
 export default function Home() {
   return (
@@ -12,6 +30,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container />
+      <Component />
     </>
   );
 }

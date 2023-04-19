@@ -26,6 +26,7 @@ import { GiChickenOven } from "react-icons/gi";
 import { MdExpandMore } from "react-icons/md";
 import { BsPlus, BsDash } from "react-icons/bs";
 import * as API from "../api";
+import Link from "next/link";
 
 const Product = (props) => {
   const item = props;
@@ -162,9 +163,11 @@ export default function TrayContainer() {
                 <Box sx={{ pt: 2 }} />
               </Grid>
               <Grid item xs={12}>
-                <Button fullWidth variant="contained">
-                  Proceed
-                </Button>
+                <Link href={`/order/cart/${data.id}`}>
+                  <Button fullWidth variant="contained">
+                    Proceed
+                  </Button>
+                </Link>
               </Grid>
             </Grid>
           )}

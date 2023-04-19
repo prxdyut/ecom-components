@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import {
   Box,
@@ -88,6 +87,7 @@ export default function HomeContainer(props) {
       <AppBar position="fixed">
         <Toolbar></Toolbar>
       </AppBar>
+      <a href={"/tray"}>tray</a>
       <Toolbar />
       <Container sx={{ py: 2 }}>
         {!!data && (
