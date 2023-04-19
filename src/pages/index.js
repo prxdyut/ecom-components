@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Container from "../containers/home";
+import Container from "../containers/index";
 import commerce from "../lib/commerce";
 
 export default function Home() {

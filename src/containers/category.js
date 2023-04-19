@@ -89,6 +89,7 @@ export default function HomeContainer(props) {
       <AppBar position="sticky">
         <Toolbar />
       </AppBar>
+      <a href={"/tray"}>tray</a>
       <Container sx={{ py: 2 }}>
         <Stack gap={2}>
           {!!data &&

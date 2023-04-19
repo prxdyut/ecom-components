@@ -25,6 +25,7 @@ export default function HomeContainer() {
       <AppBar position="sticky">
         <Toolbar></Toolbar>
       </AppBar>
+      <a href={"/tray"}>tray</a>
       <Container sx={{ py: 2 }}>
         <Grid container>
           {!!data &&
