@@ -1,25 +1,21 @@
-// pages/api/auth/[...nextauth].js
 import NextAuth from "next-auth"
-import AppleProvider from "next-auth/providers/apple"
-import GoogleProvider from "next-auth/providers/google"
-import EmailProvider from "next-auth/providers/email"
+import GithubProvider from "next-auth/providers/github"
+import GoogleProvider from "next-auth/providers/google";
 
-export default NextAuth({
-  secret: process.env.SECRET,
-  providers: [
-    // OAuth authentication providers
-    // AppleProvider({
-    //   clientId: process.env.APPLE_ID,
-    //   clientSecret: process.env.APPLE_SECRET,
-    // }),
+export const authOptions = {
+  // Configure one or more authentication providers
+providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    // // Sign in with passwordless email link
-    // EmailProvider({
-    //   server: process.env.MAIL_SERVER,
-    //   from: "<no-reply@example.com>",
-    // }),
+      clientId: '15301208763-oe6dm4pin4ao3j14d4hj7jkebtncjcdc.apps.googleusercontent.com',
+      clientSecret: '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',
+    //   authorization: {
+    //     params: {
+    //       prompt: "consent",
+    //       access_type: "offline",
+    //       response_type: "code"
+    //     }
+    //   }
+    })
   ],
-})
+}
+export default NextAuth(authOptions)
