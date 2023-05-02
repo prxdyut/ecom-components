@@ -18,6 +18,7 @@ import {
   AccordionSummary,
   Modal,
   Fade,
+  InputBase,
   ButtonGroup,
   IconButton,
   TextField,
@@ -28,25 +29,44 @@ import { MdExpandMore } from "react-icons/md";
 import { BsPlus, BsDash } from "react-icons/bs";
 import * as API from "../api";
 import commerce from "../lib/commerce";
+import { QrReader } from "react-qr-reader";
+import { useRouter } from "next/router";
+
 export default function OrderContainer() {
+  const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
-  const [checkout, setCheckout] = React.useState(null);
-  const [inputData, setInputData] = React.useState(null);
+  const [inputData, setInputData] = React.useState("");
   const [checkoutData, setCheckoutData] = React.useState(null);
-
+  const router = useRouter();
+  const { id } = router.query;
   React.useEffect(() => {
-    API.getCart().then((response) => setData(response));
-  }, []);
-  console.log(data);
-
-  const order = () =>
     commerce.checkout
-      .generateToken(data.id, { type: "cart" })
-      .then((checkout) => setCheckout(checkout.id));
+      .checkDiscount(id, {
+        code: "AD7A8DC75B",
+      })
+      .then((response) => console.log(response))
+      .catch((response) => console.log(response));
+  }, [id]);
 
-  const capture = () =>
+  // Converting Cart Items Array to Line Items Object
+  React.useEffect(() => {
+    var localObj = {};
+    console.log(id);
+    commerce.checkout.getToken(id).then((token) =>
+      token.line_items.map((item) => {
+        localObj[item.id] = { quantity: item.quantity };
+        setCheckoutData({
+          ...checkoutData,
+          ...localObj,
+        });
+      })
+    );
+  }, [id]);
+
+  const capture = () => {
+    setLoading(true);
     commerce.checkout
-      .capture(checkout, {
+      .capture(id, {
         checkoutData,
         customer: {
           firstname: "John",
@@ -72,7 +92,7 @@ export default function OrderContainer() {
           postal_zip_code: "401107",
           country: "IN",
         },
-        extra_fields: { extr_bO6J5aMgP5EjpK: "14A" },
+        extra_fields: { extr_bO6J5aMgP5EjpK: inputData },
         payment: {
           gateway: "test_gateway",
           card: {
@@ -87,20 +107,14 @@ export default function OrderContainer() {
       .then((response) => {
         console.log(response);
         commerce.cart.refresh().then((cart) => console.log(cart));
+        setLoading(false);
+        router.push("./" + response.id + "/success");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
       });
-
-  // Converting Cart Items Array to Line Items Object
-  React.useEffect(() => {
-    var localObj = {};
-    !!data &&
-      data.line_items.map((item) => {
-        localObj[item.id] = { quantity: item.quantity };
-        setCheckoutData({
-          ...checkoutData,
-          ...localObj,
-        });
-      });
-  }, [data]);
+  };
 
   console.log(checkoutData);
   return (
@@ -111,17 +125,35 @@ export default function OrderContainer() {
 
       <Container sx={{ py: 2 }}>
         <Stack gap={2}>
-          <TextField
-            id="outlined-controlled"
-            label="Controlled"
-            size="small"
-            // value={name}
-            // onChange={(event) => {
-            //   setName(event.target.value);
-            // }}
+          <InputBase
+            sx={{ ml: 1, flex: 1, fontSize: "5rem" }}
+            // placeholder="A00"
+            value={inputData}
+            onChange={(event) => {
+              setInputData(event.target.value);
+            }}
+            inputProps={{
+              maxLength: 3,
+              style: { textAlign: "center" },
+            }}
           />
-          <button onClick={order}>order</button>
-          <button onClick={capture}>captue</button>
+          <Button variant="contained" fullWidth onClick={capture}>
+            Place Order
+          </Button>
+          {loading && "loading"}
+          <QrReader
+            onResult={(result, error) => {
+              if (!!result) {
+                setInputData(result?.text);
+              }
+
+              if (!!error) {
+                console.info(error);
+              }
+            }}
+            constraints={{ facingMode: "environment" }}
+            style={{ width: "40%", height: "40%" }}
+          />
         </Stack>
       </Container>
     </>

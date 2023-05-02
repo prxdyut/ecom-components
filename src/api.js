@@ -37,3 +37,10 @@ export async function addToCart(id, quantity) {
   const cart = await commerce.cart.add(id, quantity);
   return cart;
 }
+
+export async function getCheckoutId(cartID) {
+  const { id } = await commerce.checkout.generateToken(cartID, {
+    type: "cart",
+  });
+  return id;
+}

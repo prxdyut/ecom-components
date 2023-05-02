@@ -21,6 +21,7 @@ import {
   ButtonGroup,
   IconButton,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import AspectRatio from "@mui/joy/AspectRatio";
 import { GiChickenOven } from "react-icons/gi";
 import { MdExpandMore } from "react-icons/md";
@@ -110,6 +111,7 @@ const Product = (props) => {
 };
 
 export default function TrayContainer() {
+  const router = useRouter();
   const [data, setData] = React.useState(null);
 
   API.getCart().then((response) => setData(response));
@@ -163,11 +165,17 @@ export default function TrayContainer() {
                 <Box sx={{ pt: 2 }} />
               </Grid>
               <Grid item xs={12}>
-                <Link href={`/order/cart/${data.id}`}>
-                  <Button fullWidth variant="contained">
-                    Proceed
-                  </Button>
-                </Link>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() =>
+                    API.getCheckoutId(data.id).then((checkoutID) =>
+                      router.push(`/order/${checkoutID}`)
+                    )
+                  }
+                >
+                  Proceed
+                </Button>
               </Grid>
             </Grid>
           )}

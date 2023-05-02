@@ -1,12 +1,6 @@
-import * as React from 'react';
 import Head from "next/head";
-import Container from "../../../containers/order";
-import commerce from "../../../lib/commerce";
-import { useRouter } from 'next/router';
-
+import Container from "../../containers/search";
 export default function Home() {
-  const router = useRouter();
-  
   return (
     <>
       <Head>
